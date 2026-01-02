@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom"
 import axios from 'axios'
 import { serverUrl } from '../App';
 import { toast } from 'react-toastify';
-import {ClipLoader} from 'react-spinner'
+import {ClipLoader} from 'react-spinners'
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
 
@@ -21,10 +21,11 @@ const SignUp = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     setLoading(true)
     try {
-      const result = await axios.post(serverUrl + "/api/auth/signUp", {name, email, password, role}, {withCredentials:true})
+      const result = await axios.post(serverUrl + "/api/auth/signup", {name, email, password, role}, {withCredentials:true})
       console.log(result.data)
       dispatch(setUserData(result.data))
       setLoading(false)
@@ -39,7 +40,7 @@ const SignUp = () => {
   
   return (
     <div className="bg-[#dddbdb] w-screen h-screen flex items-center justify-center">
-      <form className="w-[90%] md:w-200 h-150 bg-[white] shadow-xl rounded-2xl flex" onSubmit={(e)=>{e.preventDefault}}>
+      <form className="w-[90%] md:w-200 h-150 bg-[white] shadow-xl rounded-2xl flex" onSubmit={handleSignUp}>
         {/* left div */}
         <div className="md:w-[50%] w-[100%] h-[100%] flex flex-col items-center justify-center gap-3">
           <div>
@@ -83,7 +84,7 @@ const SignUp = () => {
           </div>
 
 
-            <button className='w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]'disabled={loading} onClick={handleSignUp}>
+            <button className='w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]'disabled={loading} type='submit'>
               {loading ? <ClipLoader size={30} color="white"/> : "Sign Up"}
             </button>
             <div className='w-[80%] flex items-center gap-2'>

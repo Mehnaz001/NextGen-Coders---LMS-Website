@@ -4,7 +4,7 @@ import google from "../assets/google.png";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import {ClipLoader} from 'react-spinner'
+import {ClipLoader} from 'react-spinners'
 import { serverUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -19,7 +19,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
     setLoading(true)
     e.preventDefault();
     try {
@@ -89,7 +89,7 @@ const Login = () => {
           <button className="w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]" disabled={loading} type="submit">
             {loading ? <ClipLoader size={30} color="white"/> : "Login"}
           </button>
-          <span className="text-[13px] cursor-pointer text-[#585757]">Forget password?</span>
+          <span className="text-[13px] cursor-pointer text-[#585757]" onClick={()=>{navigate('/forget')}}>Forget password?</span>
           
           <div className="w-[80%] flex items-center gap-2">
             <div className="w-[25%] h-[0.5px] bg-[#c4c4c4]"></div>
