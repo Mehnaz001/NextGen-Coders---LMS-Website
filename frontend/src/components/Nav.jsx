@@ -46,61 +46,71 @@ const Nav = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6">
-          {userData?.role === "educator" && (
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="text-gray-300 hover:text-orange-500 transition"
-            >
-              Dashboard
-            </button>
-          )}
+        {/* Right section */}
+<div className="hidden md:flex items-center gap-4">
 
-          {!userData ? (
-            <button
-              onClick={() => navigate("/login")}
-              className="px-4 py-2 bg-[#1a1a1a] text-gray-300 rounded-md hover:bg-[#222]"
-            >
-              Login
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={handleLogOut}
-                className="px-4 py-2 bg-orange-500 text-black rounded-md font-medium hover:bg-orange-400"
-              >
-                Logout
-              </button>
+  {userData?.role === "educator" && (
+    <button
+      onClick={() => navigate("/dashboard")}
+      className="text-gray-300 hover:text-orange-500 transition"
+    >
+      Dashboard
+    </button>
+  )}
 
-              {/* Avatar */}
-              <div className="relative">
-                <div
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="w-9 h-9 rounded-full bg-orange-500 text-black flex items-center justify-center font-semibold cursor-pointer"
-                >
-                  {userData?.name?.charAt(0)}
-                </div>
+  {/* Login button (only when NOT logged in) */}
+  {!userData && (
+    <button
+      onClick={() => navigate("/login")}
+      className="px-4 py-2 bg-[#1a1a1a] text-gray-300 rounded-md hover:bg-[#222]"
+    >
+      Login
+    </button>
+  )}
 
-                {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] border border-[#2a2a2a] rounded-md shadow-lg overflow-hidden">
-                    <button
-                      onClick={() => navigate("/profile")}
-                      className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222]"
-                    >
-                      My Profile
-                    </button>
-                    <button
-                      onClick={() => navigate("/courses")}
-                      className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222]"
-                    >
-                      My Courses
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+  {/* Avatar area – SAME PLACE */}
+  <div className="relative">
+    {!userData ? (
+      <IoPersonCircleSharp
+        size={36}
+        className="text-gray-400 hover:text-orange-500 cursor-pointer transition"
+        onClick={() => navigate("/login")}
+      />
+    ) : (
+      <div
+        onClick={() => setProfileOpen(!profileOpen)}
+        className="w-9 h-9 rounded-full bg-orange-500 text-black flex items-center justify-center font-semibold cursor-pointer"
+      >
+        {userData?.name?.charAt(0)}
+      </div>
+    )}
+
+    {/* Profile dropdown */}
+    {profileOpen && userData && (
+      <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] border border-[#2a2a2a] rounded-md shadow-lg overflow-hidden">
+        <button
+          onClick={() => navigate("/profile")}
+          className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222]"
+        >
+          My Profile
+        </button>
+        <button
+          onClick={() => navigate("/courses")}
+          className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222]"
+        >
+          My Courses
+        </button>
+        <button
+          onClick={handleLogOut}
+          className="w-full px-4 py-2 text-left text-red-400 hover:bg-[#222]"
+        >
+          Logout
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
 
         {/* Mobile Hamburger */}
         <div className="md:hidden text-white">
