@@ -10,6 +10,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
+import { signInWithPopup } from 'firebase/auth';
+import {auth,provider} from '../utils/firebase.js'
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -35,6 +37,26 @@ const Login = () => {
       toast.error(error.response?.data?.message || "Something went wrong")
     }
   }
+  const googleLogin = async () => {
+      try {
+        const response = await signInWithPopup(auth, provider)
+        let user = response.user
+        let name = user.name
+        let email = user.email
+        let role = ""
+  
+        const result = await axios.post(serverUrl + "/api/auth/googleauth", { name ,email, role} , {withCredentials:true})
+        dispatch(setUserData(result.data))
+        setLoading(false)
+        navigate("/")
+        toast.done("Sign Up Successfully")
+  
+      } catch (error) {
+        console.log(error)
+        setLoading(false)
+        toast.error(error.response.data.message)
+      }
+    }
   return (
     <div className="bg-[#dddbdb] w-screen h-screen flex items-center justify-center">
       <form className="w-[90%] md:w-200 h-150 bg-[white] shadow-xl rounded-2xl flex" onSubmit={handleLogin}>
@@ -99,7 +121,7 @@ const Login = () => {
             <div className="w-[25%] h-[0.5px] bg-[#c4c4c4]"></div>
           </div>
 
-          <div className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center">
+          <div className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center" onClick={googleLogin}>
             <img src={google} alt="" className="w-[35px]" />
             <span className="text-[18px] text-gray-500">oogle</span>
           </div>
