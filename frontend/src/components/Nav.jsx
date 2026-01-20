@@ -44,7 +44,6 @@ const Nav = () => {
       "
     >
       <div className="h-full px-6 flex items-center justify-between">
-
         {/* Logo */}
         <div
           className="flex items-center gap-3 cursor-pointer"
@@ -58,7 +57,6 @@ const Nav = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-4">
-
           {userData?.role === "educator" && (
             <button
               onClick={() => navigate("/dashboard")}
@@ -97,15 +95,25 @@ const Nav = () => {
               <div
                 onClick={() => setProfileOpen(!profileOpen)}
                 className="
-                  w-10 h-10 rounded-full
-                  bg-white/20 backdrop-blur
-                  border border-white/30
-                  text-white font-semibold
-                  flex items-center justify-center
-                  cursor-pointer
-                "
+    w-10 h-10 rounded-full
+    border border-white/30
+    bg-white/20 backdrop-blur
+    cursor-pointer
+    overflow-hidden
+    flex items-center justify-center
+  "
               >
-                {userData?.name?.charAt(0)}
+                {userData?.photoUrl ? (
+                  <img
+                    src={userData.photoUrl}
+                    alt={userData.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-white font-semibold">
+                    {userData?.name?.charAt(0).toUpperCase()}
+                  </span>
+                )}
               </div>
             )}
 
