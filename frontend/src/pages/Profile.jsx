@@ -78,7 +78,7 @@ const Profile = () => {
             <div className="mt-6">
               <h2 className="text-lg font-semibold mb-2">About</h2>
               <p className="text-gray-300 leading-relaxed">
-                {userData.bio || "No bio added yet."}
+                {userData.description || "No bio added yet."}
               </p>
             </div>
 

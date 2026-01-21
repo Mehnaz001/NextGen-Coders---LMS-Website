@@ -33,8 +33,8 @@ const Nav = () => {
   return (
     <nav
       className="
-        fixed top-10 left-1/2 -translate-x-1/2
-        w-[95%] max-w-7xl h-[60px]
+        fixed top-3 left-1/2 -translate-x-1/2
+        w-[95%] max-w-7xl h-[65px]
         bg-white/10 backdrop-blur-2xl
         border border-white/20
         rounded-4xl

@@ -4,3 +4,37 @@
 *{
   font-family: "Outfit";
 }
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 1.1s ease-out forwards;
+}
+
+.animate-fadeUpDelay {
+  animation: fadeUp 1.3s ease-out forwards;
+}
+
+@keyframes heroEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-hero {
+  animation: heroEnter 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
