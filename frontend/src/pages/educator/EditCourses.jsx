@@ -1,0 +1,254 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaArrowLeft, FaTrash, FaBook } from "react-icons/fa";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { serverUrl } from "../../App";
+
+const categories = [
+  "Web Development",
+  "AI / ML",
+  "UI / UX Design",
+  "Data Science",
+  "Cloud Computing",
+  "Mobile App Development",
+  "DSA",
+];
+
+const levels = ["Beginner", "Intermediate", "Advanced"];
+
+const EditCourses = () => {
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+
+  const [course, setCourse] = useState({});
+  const [thumbnail, setThumbnail] = useState(null);
+  const [preview, setPreview] = useState("");
+
+  // Fetch course
+  useEffect(() => {
+    fetchCourse();
+  }, []);
+
+  const fetchCourse = async () => {
+    try {
+      const res = await axios.get(
+        `${serverUrl}/api/course/editcourse/${courseId}`,
+        { withCredentials: true }
+      );
+      setCourse(res.data);
+      setPreview(res.data.thumbnail);
+    } catch (err) {
+      toast.error("Failed to load course");
+    }
+  };
+
+  // Update course
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      Object.keys(course).forEach((key) => {
+        formData.append(key, course[key]);
+      });
+      if (thumbnail) formData.append("thumbnail", thumbnail);
+
+      await axios.post(
+        `${serverUrl}/api/course/editcourse/${courseId}`,
+        formData,
+        { withCredentials: true }
+      );
+
+      toast.success("Course updated");
+    } catch (err) {
+      toast.error("Update failed");
+    }
+  };
+
+  // Delete
+  const handleDelete = async () => {
+    try {
+      await axios.get(
+        `${serverUrl}/api/course/remove/${courseId}`,
+        { withCredentials: true }
+      );
+      toast.success("Course removed");
+      navigate("/courses");
+    } catch (err) {
+      toast.error("Delete failed");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white px-6 md:px-20 py-10">
+      {/* Back */}
+      <button
+        onClick={() => navigate("/courses")}
+        className="flex items-center gap-2 text-gray-300 hover:text-orange-500 mb-8"
+      >
+        <FaArrowLeft />
+        Back to Courses
+      </button>
+
+      <div className="grid md:grid-cols-3 gap-10">
+        {/* LEFT FORM */}
+        <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-8 space-y-6">
+          <h1 className="text-2xl font-bold">Edit Course</h1>
+
+          {/* Title */}
+          <Input
+            label="Title"
+            value={course.title || ""}
+            onChange={(e) =>
+              setCourse({ ...course, title: e.target.value })
+            }
+          />
+
+          {/* Subtitle */}
+          <Input
+            label="Subtitle"
+            value={course.subTitle || ""}
+            onChange={(e) =>
+              setCourse({ ...course, subTitle: e.target.value })
+            }
+          />
+
+          {/* Description */}
+          <Textarea
+            label="Description"
+            value={course.description || ""}
+            onChange={(e) =>
+              setCourse({ ...course, description: e.target.value })
+            }
+          />
+
+          {/* Category */}
+          <Select
+            label="Category"
+            value={course.category}
+            options={categories}
+            onChange={(e) =>
+              setCourse({ ...course, category: e.target.value })
+            }
+          />
+
+          {/* Level */}
+          <Select
+            label="Level"
+            value={course.level}
+            options={levels}
+            onChange={(e) =>
+              setCourse({ ...course, level: e.target.value })
+            }
+          />
+
+          {/* Price */}
+          <Input
+            label="Price (₹)"
+            type="number"
+            value={course.price || ""}
+            onChange={(e) =>
+              setCourse({ ...course, price: e.target.value })
+            }
+          />
+
+          {/* Publish */}
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              checked={course.isPublished || false}
+              onChange={(e) =>
+                setCourse({ ...course, isPublished: e.target.checked })
+              }
+            />
+            <span>Publish this course</span>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-4 mt-6">
+            <button
+              onClick={handleSave}
+              className="px-6 py-3 bg-orange-500 text-black rounded-full font-semibold"
+            >
+              Save Changes
+            </button>
+
+            <button
+              onClick={() => navigate(`/lectures/${courseId}`)}
+              className="px-6 py-3 border border-white/20 rounded-full flex items-center gap-2"
+            >
+              <FaBook />
+              Go to Lectures
+            </button>
+          </div>
+        </div>
+
+        {/* RIGHT THUMBNAIL */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-fit">
+          <h2 className="text-lg font-semibold mb-4">Thumbnail</h2>
+
+          <img
+            src={preview}
+            alt="preview"
+            className="w-full h-48 object-cover rounded-xl mb-4 border border-white/20"
+          />
+
+          <input
+            type="file"
+            onChange={(e) => {
+              setThumbnail(e.target.files[0]);
+              setPreview(URL.createObjectURL(e.target.files[0]));
+            }}
+            className="text-sm"
+          />
+
+          <button
+            onClick={handleDelete}
+            className="mt-6 w-full py-2 bg-red-600 rounded-full flex items-center justify-center gap-2"
+          >
+            <FaTrash />
+            Remove Course
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Input = ({ label, ...props }) => (
+  <div>
+    <label className="block text-sm text-gray-400 mb-2">{label}</label>
+    <input
+      {...props}
+      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 focus:border-orange-500 outline-none"
+    />
+  </div>
+);
+
+const Textarea = ({ label, ...props }) => (
+  <div>
+    <label className="block text-sm text-gray-400 mb-2">{label}</label>
+    <textarea
+      rows={4}
+      {...props}
+      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 focus:border-orange-500 outline-none"
+    />
+  </div>
+);
+
+const Select = ({ label, options, ...props }) => (
+  <div>
+    <label className="block text-sm text-gray-400 mb-2">{label}</label>
+    <select
+      {...props}
+      className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 focus:border-orange-500 outline-none"
+    >
+      {options.map((op, i) => (
+        <option key={i} value={op}>
+          {op}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
+export default EditCourses;
