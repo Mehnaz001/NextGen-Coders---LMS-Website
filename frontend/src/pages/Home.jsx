@@ -4,8 +4,11 @@ import ExploreCourses from "../components/ExploreCourses";
 import home from "../assets/home.png";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaUserGraduate, FaBookOpen, FaUsers, FaHeadset } from "react-icons/fa";
+import CardPage from "../components/CardPage";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate()
   return (
     <div className="w-full bg-black overflow-x-hidden">
       <Nav />
@@ -36,7 +39,9 @@ const Home = () => {
 
           {/* Buttons */}
           <div className="mt-10 flex justify-center gap-5 flex-wrap">
-            <button className="px-8 py-3 rounded-full bg-white text-black font-semibold transition hover:bg-orange-500 hover:text-white">
+            <button 
+            onClick={()=>navigate('/viewcourses')}
+            className="px-8 py-3 rounded-full bg-white text-black font-semibold transition hover:bg-orange-500 hover:text-white">
               View All Courses
             </button>
 
@@ -60,6 +65,7 @@ const Home = () => {
       <section className="relative z-20 bg-black">
         <ExploreCourses />
       </section>
+      <CardPage/>
     </div>
   );
 };

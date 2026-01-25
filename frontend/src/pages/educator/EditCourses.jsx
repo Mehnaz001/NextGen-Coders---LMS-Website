@@ -4,6 +4,7 @@ import { FaArrowLeft, FaTrash, FaBook } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { serverUrl } from "../../App";
+import { ClipLoader } from "react-spinners";
 
 const categories = [
   "Web Development",
@@ -24,6 +25,7 @@ const EditCourses = () => {
   const [course, setCourse] = useState({});
   const [thumbnail, setThumbnail] = useState(null);
   const [preview, setPreview] = useState("");
+  const [loading,setLoading] = useState(false)
 
   // Fetch course
   useEffect(() => {
@@ -33,7 +35,7 @@ const EditCourses = () => {
   const fetchCourse = async () => {
     try {
       const res = await axios.get(
-        `${serverUrl}/api/course/editcourse/${courseId}`,
+        `${serverUrl}/api/course/getcourse/${courseId}`,
         { withCredentials: true }
       );
       setCourse(res.data);
@@ -45,6 +47,7 @@ const EditCourses = () => {
 
   // Update course
   const handleSave = async () => {
+    setLoading(true)
     try {
       const formData = new FormData();
       Object.keys(course).forEach((key) => {
@@ -57,23 +60,27 @@ const EditCourses = () => {
         formData,
         { withCredentials: true }
       );
-
+      setLoading(false)
       toast.success("Course updated");
     } catch (err) {
+      setLoading(false)
       toast.error("Update failed");
     }
   };
 
   // Delete
   const handleDelete = async () => {
+    setLoading(true)
     try {
       await axios.get(
         `${serverUrl}/api/course/remove/${courseId}`,
         { withCredentials: true }
       );
+      setLoading(false)
       toast.success("Course removed");
       navigate("/courses");
     } catch (err) {
+      setLoading(false)
       toast.error("Delete failed");
     }
   };
@@ -166,10 +173,11 @@ const EditCourses = () => {
           {/* Buttons */}
           <div className="flex gap-4 mt-6">
             <button
+              disabled={loading}
               onClick={handleSave}
               className="px-6 py-3 bg-orange-500 text-black rounded-full font-semibold"
             >
-              Save Changes
+              {loading? <ClipLoader color="black" size={30}/>:"Save Changes"}
             </button>
 
             <button
@@ -202,11 +210,11 @@ const EditCourses = () => {
           />
 
           <button
+            disabled={loading}
             onClick={handleDelete}
             className="mt-6 w-full py-2 bg-red-600 rounded-full flex items-center justify-center gap-2"
           >
-            <FaTrash />
-            Remove Course
+            {loading? (<ClipLoader color="white" size={30}/>): ( <> <FaTrash /> Remove Course </>)}
           </button>
         </div>
       </div>
