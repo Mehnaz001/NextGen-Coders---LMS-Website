@@ -7,6 +7,7 @@ import {
   FaUsers,
   FaRupeeSign,
   FaChartLine,
+  FaArrowLeft,
 } from "react-icons/fa";
 
 const Dashboard = () => {
@@ -14,13 +15,23 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 md:px-14 py-20">
-      {/* PROFILE + EARNINGS */}
-      <div className="max-w-5xl mx-auto bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div className="min-h-screen bg-black text-white px-6 md:px-16 py-12">
 
-        {/* Profile */}
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-white/20 border border-white/30 flex items-center justify-center overflow-hidden text-xl font-bold">
+      {/* 🔙 Back */}
+      <button
+        onClick={() => navigate("/")}
+        className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition mb-10"
+      >
+        <FaArrowLeft />
+        Back to Home
+      </button>
+
+      {/* 👤 Profile Section */}
+      <div className="bg-[#111] border border-white/10 rounded-xl p-6 flex flex-col md:flex-row justify-between items-center gap-8">
+
+        {/* Left - User Info */}
+        <div className="flex items-center gap-5">
+          <div className="w-20 h-20 rounded-full bg-orange-500 text-black flex items-center justify-center text-3xl font-bold overflow-hidden">
             {userData?.photoUrl ? (
               <img
                 src={userData.photoUrl}
@@ -33,24 +44,24 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold">{userData?.name}</h2>
-            <p className="text-gray-300 text-sm max-w-sm">
+            <h2 className="text-2xl font-semibold">{userData?.name}</h2>
+            <p className="text-gray-400 text-sm mt-1 max-w-md">
               {userData?.description || "Educator on the platform."}
             </p>
           </div>
         </div>
 
-        {/* Earnings */}
-        <div className="flex flex-col items-center md:items-end gap-2">
-          <p className="text-gray-300 text-sm">Total Earnings</p>
-          <div className="flex items-center gap-1 text-2xl font-bold text-orange-500">
+        {/* Right - Earnings */}
+        <div className="text-center md:text-right">
+          <p className="text-gray-400 text-sm">Total Earnings</p>
+          <div className="flex items-center justify-center md:justify-end gap-1 text-3xl font-bold text-orange-500 mt-1">
             <FaRupeeSign />
             25,400
           </div>
 
           <button
             onClick={() => navigate("/courses")}
-            className="mt-2 flex items-center gap-2 px-5 py-2 bg-orange-500 text-black rounded-full text-sm font-semibold hover:bg-orange-400 transition"
+            className="mt-4 flex items-center gap-2 px-6 py-2 bg-orange-500 text-black rounded-full font-semibold hover:bg-orange-400 transition"
           >
             <FaPlus />
             Create Course
@@ -58,17 +69,18 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* INSIGHTS */}
-      <div className="max-w-5xl mx-auto mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {/* 📊 Insights */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
         <InsightCard icon={<FaBookOpen />} title="Courses" value="8" />
         <InsightCard icon={<FaUsers />} title="Students" value="1,240" />
         <InsightCard icon={<FaChartLine />} title="Growth" value="+18%" />
       </div>
 
-      {/* GRAPH */}
-      <div className="max-w-5xl mx-auto mt-10 bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl p-6">
-        <h3 className="text-lg font-semibold mb-4">Course Performance</h3>
-        <div className="h-52 border border-dashed border-white/30 rounded-xl flex items-center justify-center text-gray-400 text-sm">
+      {/* 📈 Graph Section */}
+      <div className="mt-12 bg-[#111] border border-white/10 rounded-xl p-6">
+        <h3 className="text-lg font-semibold mb-6">Course Performance</h3>
+
+        <div className="h-56 border border-dashed border-white/20 rounded-lg flex items-center justify-center text-gray-500">
           Graph will appear here
         </div>
       </div>
@@ -77,12 +89,10 @@ const Dashboard = () => {
 };
 
 const InsightCard = ({ icon, title, value }) => (
-  <div className="group bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl p-5 flex flex-col items-center gap-2 transition hover:bg-orange-500 hover:text-black">
-    <div className="text-2xl text-orange-500 group-hover:text-black transition">
-      {icon}
-    </div>
-    <p className="text-sm">{title}</p>
-    <p className="text-xl font-bold">{value}</p>
+  <div className="bg-[#111] border border-white/10 rounded-xl p-6 flex flex-col items-center gap-3 hover:border-orange-500 transition">
+    <div className="text-3xl text-orange-500">{icon}</div>
+    <p className="text-gray-400 text-sm">{title}</p>
+    <p className="text-2xl font-bold">{value}</p>
   </div>
 );
 

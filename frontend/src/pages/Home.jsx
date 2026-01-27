@@ -2,13 +2,14 @@ import React from "react";
 import Nav from "../components/Nav";
 import ExploreCourses from "../components/ExploreCourses";
 import home from "../assets/home.png";
-import { AiOutlineSearch } from "react-icons/ai";
+import aiIcon from "../assets/ai-search.png";   // ✅ AI icon
 import { FaUserGraduate, FaBookOpen, FaUsers, FaHeadset } from "react-icons/fa";
 import CardPage from "../components/CardPage";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   return (
     <div className="w-full bg-black overflow-x-hidden">
       <Nav />
@@ -16,17 +17,14 @@ const Home = () => {
       {/* HERO SECTION */}
       <section className="relative min-h-screen pt-[72px] flex items-center justify-center">
         
-        {/* Background Image */}
         <img
           src={home}
           alt="home-bg"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
 
-        {/* Dark Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black" />
 
-        {/* Content */}
         <div className="relative z-10 text-center px-6 max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-bold text-white">
             Grow Your Learning Path
@@ -39,15 +37,17 @@ const Home = () => {
 
           {/* Buttons */}
           <div className="mt-10 flex justify-center gap-5 flex-wrap">
-            <button 
-            onClick={()=>navigate('/viewcourses')}
-            className="px-8 py-3 rounded-full bg-white text-black font-semibold transition hover:bg-orange-500 hover:text-white">
+            <button
+              onClick={() => navigate("/viewcourses")}
+              className="px-8 py-3 rounded-full bg-white text-black font-semibold transition hover:bg-orange-500 hover:text-white"
+            >
               View All Courses
             </button>
 
-            <button className="px-8 py-3 rounded-full border border-white text-white flex items-center gap-2 font-semibold transition hover:bg-orange-500 hover:border-orange-500">
+            {/* ✅ AI Search Button */}
+            <button className="px-8 py-3 rounded-full border bg-white border-white text-black flex items-center gap-3 font-semibold transition hover:bg-orange-500 hover:border-orange-500">
               Search with AI
-              <AiOutlineSearch size={20} />
+              <img src={aiIcon} alt="ai" className="w-8 h-7"  />
             </button>
           </div>
 
@@ -62,20 +62,27 @@ const Home = () => {
       </section>
 
       {/* EXPLORE COURSES */}
-      <section className="relative z-20 bg-black">
+      <section className="bg-black py-20 px-6 md:px-16">
         <ExploreCourses />
       </section>
-      <CardPage/>
+
+      {/* POPULAR COURSES */}
+      <section className="bg-black py-20 px-6 md:px-16">
+        <CardPage />
+      </section>
     </div>
   );
 };
 
 const Stat = ({ icon, number, label }) => (
   <div className="flex flex-col items-center gap-2 text-white">
-    <div className="text-orange-500 text-2xl">{icon}</div>
+    <div className="text-orange-500 text-2xl transition-transform duration-300 ease-in-out hover:scale-125">
+      {icon}
+    </div>
     <h3 className="text-xl font-bold">{number}</h3>
     <p className="text-gray-400 text-sm">{label}</p>
   </div>
 );
+
 
 export default Home;

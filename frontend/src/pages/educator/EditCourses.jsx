@@ -26,6 +26,7 @@ const EditCourses = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [preview, setPreview] = useState("");
   const [loading,setLoading] = useState(false)
+  const [deleting,setDeleting] = useState(false)
 
   // Fetch course
   useEffect(() => {
@@ -60,8 +61,11 @@ const EditCourses = () => {
         formData,
         { withCredentials: true }
       );
+      
       setLoading(false)
+      navigate('/courses')
       toast.success("Course updated");
+      
     } catch (err) {
       setLoading(false)
       toast.error("Update failed");
@@ -70,17 +74,17 @@ const EditCourses = () => {
 
   // Delete
   const handleDelete = async () => {
-    setLoading(true)
+    setDeleting(true)
     try {
       await axios.get(
         `${serverUrl}/api/course/remove/${courseId}`,
         { withCredentials: true }
       );
-      setLoading(false)
+      setDeleting(false)
       toast.success("Course removed");
       navigate("/courses");
     } catch (err) {
-      setLoading(false)
+      setDeleting(false)
       toast.error("Delete failed");
     }
   };
@@ -181,7 +185,7 @@ const EditCourses = () => {
             </button>
 
             <button
-              onClick={() => navigate(`/lectures/${courseId}`)}
+              onClick={() => navigate(`/createlecture/${courseId}`)}
               className="px-6 py-3 border border-white/20 rounded-full flex items-center gap-2"
             >
               <FaBook />
@@ -210,11 +214,11 @@ const EditCourses = () => {
           />
 
           <button
-            disabled={loading}
+            disabled={deleting}
             onClick={handleDelete}
             className="mt-6 w-full py-2 bg-red-600 rounded-full flex items-center justify-center gap-2"
           >
-            {loading? (<ClipLoader color="white" size={30}/>): ( <> <FaTrash /> Remove Course </>)}
+            {deleting? (<ClipLoader color="white" size={30}/>): ( <> <FaTrash /> Remove Course </>)}
           </button>
         </div>
       </div>

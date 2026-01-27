@@ -30,7 +30,7 @@ const ExploreCourses = () => {
           </p>
 
           <button
-            onClick={() => navigate("/courses")}
+            onClick={() => navigate("/viewcourses")}
             className="mt-8 inline-flex items-center gap-3 px-8 py-4 bg-orange-500 text-black font-semibold rounded-full hover:bg-orange-400 transition-all hover:scale-105"
           >
             Explore Courses

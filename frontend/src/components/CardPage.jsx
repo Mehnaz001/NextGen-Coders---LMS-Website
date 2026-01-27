@@ -9,21 +9,32 @@ const CardPage = () => {
   const { courseData } = useSelector((state) => state.course);
 
   return (
-    <div className="px-6 md:px-16 py-12 text-white">
-      <h2 className="text-3xl font-bold mb-8">Popular Courses</h2>
+    <section className="w-full bg-black text-white py-24">
+      <div className="max-w-7xl mx-auto px-6 md:px-16">
+        {/* Heading */}
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-extrabold tracking-wide mb-4 text-orange-500 bg-clip-text">
+            Courses That Shape Your Future
+          </h2>
 
-      {courseData?.length === 0 ? (
-        <p className="text-gray-400">No courses available</p>
+          <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed">
+            Explore industry-ready courses crafted to boost your skills, confidence,
+            and career growth. Learn what truly matters, from experts you can trust.
+          </p>
+        </div>
+
+
+        {courseData && courseData.length > 0 ? (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {courseData.map((course) => (
+            <CourseCard key={course._id} course={course} />
+          ))}
+        </div>
       ) : (
-        <div className="grid md:grid-cols-3 gap-8">
-  {courseData?.length > 0 &&
-    courseData.map((course) => (
-      <CourseCard key={course._id} course={course} />
-    ))}
-</div>
-
+        <p className="text-gray-400">Loading courses...</p>
       )}
-    </div>
+      </div>
+    </section>
   );
 };
 
