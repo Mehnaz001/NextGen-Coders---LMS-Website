@@ -28,7 +28,7 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:"User"
     }],
-    lecture : [{
+    lectures : [{
         type: mongoose.Schema.Types.ObjectId,
         ref:"Lecture"
     }],

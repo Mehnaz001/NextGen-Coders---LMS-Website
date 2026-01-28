@@ -17,6 +17,7 @@ import EditCourses from './pages/educator/EditCourses'
 import getCreatorCourse from './customHooks/getCreatorCourse'
 import getPublishedCourse from './customHooks/getPublishedCourse'
 import CreateLecture from './pages/educator/CreateLecture'
+import EditLecture from './pages/educator/EditLecture'
 
 export const serverUrl = "http://localhost:8000"
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
         <Route path='/viewcourses' element={<AllCourses/> }/>
         <Route path='/editcourse/:courseId' element={userData?.role === "educator"? <EditCourses/>: <Navigate to={'/signup'}/>} />
         <Route path='/createlecture/:courseId' element={userData?.role === "educator"? <CreateLecture/>: <Navigate to={'/signup'}/>} />
+        <Route path='/editlecture/:courseId/:lectureId' element={userData?.role === "educator"? <EditLecture/>: <Navigate to={'/signup'}/>} />
       </Routes>
 
     </>

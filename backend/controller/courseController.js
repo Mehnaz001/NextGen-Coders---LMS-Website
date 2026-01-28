@@ -110,7 +110,7 @@ export const createLecture = async (req,res) => {
         const course = await Course.findById(courseId)
 
         if(course) {
-           await course.lecture.push(lecture._id)
+           await course.lectures.push(lecture._id)
         }
 
         await course.populate("lectures")
@@ -171,8 +171,8 @@ export const removeLecture = async (req,res) => {
             return res.status(404).json({message:"Lecture is not found"})
         }
         await Course.updateOne(
-            {lecture:lectureId},
-            {$pull:{lecture:lectureId}}
+            {lectures:lectureId},
+            {$pull:{lectures:lectureId}}
         )
 
         return res.status(200).json({message:"Lecture Removed"})
