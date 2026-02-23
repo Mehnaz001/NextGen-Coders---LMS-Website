@@ -1,14 +1,21 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";   // ✅ import
 
 const CourseCard = ({ course }) => {
+  const navigate = useNavigate();                 // ✅ create
+
   const DEFAULT_THUMBNAIL =
-  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop";
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop";
+
   const priceLabel =
     !course.price || Number(course.price) === 0 ? "Free" : `₹${course.price}`;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-orange-500 hover:border-2 transition">
+    <div
+      className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-orange-500 hover:border-2 transition cursor-pointer"
+      onClick={() => navigate(`/viewcourse/${course._id}`)}  // ✅ match route
+    >
       {/* Thumbnail */}
       <div className="relative">
         <img
