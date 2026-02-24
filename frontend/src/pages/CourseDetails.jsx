@@ -5,17 +5,19 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const CourseDetails = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { courseData } = useSelector((state) => state.course);
-
+  const { userData } = useSelector((state) => state.user);
   const [course, setCourse] = useState(null);
   const [educator, setEducator] = useState(null);
   const [creatorCourses, setCreatorCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openLectureId, setOpenLectureId] = useState("");
+  const [isEnroll, setIsEnroll] = useState(false)
 
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -40,15 +42,25 @@ const CourseDetails = () => {
     }
   };
 
+  const checkEnrollment = () => {
+    const verify = userData?.enrolledCourses.some((c)=> (typeof c === 'string'? c: c._id).toString() === courseId?.toString())
+    if(verify) {
+      setIsEnroll(true)
+    }
+  }
   useEffect(() => {
     fetchCourse();
   }, [courseId, courseData]);
 
-  useEffect(()=>{
+  useEffect(() => {
+    checkEnrollment();
+  }, [userData, courseId]);
+
+  useEffect(() => {
     const handleCreator = async () => {
-      if(course?.creator) {
+      if (course?.creator) {
         try {
-          const result = await axios.post(`${serverUrl}/api/course/creator`, {userId:course?.creator}, {withCredentials:true})
+          const result = await axios.post(`${serverUrl}/api/course/creator`, { userId: course?.creator }, { withCredentials: true })
           console.log(result)
           setEducator(result.data)
         } catch (error) {
@@ -57,22 +69,57 @@ const CourseDetails = () => {
       }
     }
     handleCreator()
-  },[course])
+  }, [course])
 
-  useEffect(()=> {
-    if(educator?._id && courseData.length > 0) {
-      const otherCourses = courseData.filter((c)=>
-      c.creator === educator?._id && c._id !== courseId)
+  useEffect(() => {
+    if (educator?._id && courseData.length > 0) {
+      const otherCourses = courseData.filter((c) =>
+        c.creator === educator?._id && c._id !== courseId)
       setCreatorCourses(otherCourses)
     }
-    
-  },[educator, courseData])
+
+  }, [educator, courseData])
   if (loading)
     return (
       <div className="min-h-screen bg-black flex justify-center items-center">
         <ClipLoader color="orange" />
       </div>
     );
+
+  const handleEnroll = async (userId, courseId) => {
+    try {
+      const orderData = await axios.post(serverUrl + '/api/order/razorpay-order', { userId, courseId }, { withCredentials: true })
+      console.log(orderData)
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.data.amount,
+        currency: 'INR',
+        name: "Mehnaz Codes",
+        description: "Course Enroll Payment",
+        order_id: orderData.data.id,
+        handler: async function (response) {
+          console.log("Razorpay Payment", response)
+          try {
+            const verifyPayment = await axios.post(serverUrl + '/api/order/verifypayment', { ...response, courseId, userId }, { withCredentials: true })
+            setIsEnroll(true)
+            toast.success(verifyPayment.data.message)
+          } catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message)
+          }
+        }
+      }
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+    } catch (error) {
+      console.log(error)
+      toast.error(
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong"
+      );
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black text-white px-6 md:px-20 py-10">
@@ -126,9 +173,15 @@ const CourseDetails = () => {
             </div>
           )}
 
-          <button className="mt-6 w-52 py-3 bg-orange-500 text-black rounded-full font-semibold hover:bg-orange-400 transition">
+          {
+            isEnroll? <button className="mt-6 w-52 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-orange-400 transition">
+            Watch Now
+          </button> : <button className="mt-6 w-52 py-3 bg-orange-500 text-black rounded-full font-semibold hover:bg-orange-400 transition"
+            onClick={() => handleEnroll(userData._id, courseId)}
+          >
             Enroll Now
           </button>
+          }
         </div>
       </div>
 
@@ -154,8 +207,8 @@ const CourseDetails = () => {
                 onClick={() =>
                   lec.isPreviewFree
                     ? setOpenLectureId(
-                        openLectureId === lec._id ? "" : lec._id
-                      )
+                      openLectureId === lec._id ? "" : lec._id
+                    )
                     : null
                 }
                 className="p-4 flex justify-between items-center cursor-pointer"
@@ -237,9 +290,8 @@ const CourseDetails = () => {
             <FaStar
               key={num}
               onClick={() => setRating(num)}
-              className={`cursor-pointer ${
-                num <= rating ? "text-yellow-400" : ""
-              }`}
+              className={`cursor-pointer ${num <= rating ? "text-yellow-400" : ""
+                }`}
             />
           ))}
         </div>
