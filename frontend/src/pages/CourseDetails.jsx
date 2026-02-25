@@ -282,8 +282,9 @@ const CourseDetails = () => {
       {/* ⭐ Review Section */}
       <div className="mt-14">
         <h2 className="text-2xl font-semibold mb-6">
-          Write a Review
+          isko shi karna hai 
         </h2>
+        yha ye extra likh hai 
 
         <div className="flex gap-3 text-2xl text-gray-400 mb-4">
           {[1, 2, 3, 4, 5].map((num) => (
