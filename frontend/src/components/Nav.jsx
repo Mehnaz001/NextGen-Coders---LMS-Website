@@ -136,7 +136,7 @@ const Nav = () => {
                   My Profile
                 </button>
                 <button
-                  onClick={() => navigate("/courses")}
+                  onClick={() => navigate("/mycourses")}
                   className="w-full px-4 py-2 text-left text-gray-300 hover:bg-white/10"
                 >
                   My Courses
@@ -203,7 +203,7 @@ const Nav = () => {
                 My Profile
               </button>
               <button
-                onClick={() => navigate("/courses")}
+                onClick={() => navigate("/mycourses")}
                 className="block w-full text-left text-gray-300"
               >
                 My Courses

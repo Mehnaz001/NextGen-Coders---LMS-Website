@@ -174,7 +174,9 @@ const CourseDetails = () => {
           )}
 
           {
-            isEnroll? <button className="mt-6 w-52 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-orange-400 transition">
+            isEnroll? <button className="mt-6 w-52 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-orange-400 transition"
+            onClick ={()=>navigate(`/viewlecture/${courseId}`)}
+            >
             Watch Now
           </button> : <button className="mt-6 w-52 py-3 bg-orange-500 text-black rounded-full font-semibold hover:bg-orange-400 transition"
             onClick={() => handleEnroll(userData._id, courseId)}

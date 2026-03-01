@@ -19,6 +19,8 @@ import getPublishedCourse from './customHooks/getPublishedCourse'
 import CreateLecture from './pages/educator/CreateLecture'
 import EditLecture from './pages/educator/EditLecture'
 import CourseDetails from './pages/CourseDetails'
+import ViewLecture from './pages/ViewLecture'
+import MyEnrolledCourses from './pages/MyEnrolledCourses'
 
 export const serverUrl = "http://localhost:8000"
 const App = () => {
@@ -44,6 +46,8 @@ const App = () => {
         <Route path='/editcourse/:courseId' element={userData?.role === "educator"? <EditCourses/>: <Navigate to={'/signup'}/>} />
         <Route path='/createlecture/:courseId' element={userData?.role === "educator"? <CreateLecture/>: <Navigate to={'/signup'}/>} />
         <Route path='/editlecture/:courseId/:lectureId' element={userData?.role === "educator"? <EditLecture/>: <Navigate to={'/signup'}/>} />
+        <Route path="/viewlecture/:courseId" element={<ViewLecture/>} />
+        <Route path='/mycourses' element={userData?<MyEnrolledCourses/>:<Navigate to={'/signup'}/>} />
       </Routes>
 
     </>
