@@ -6,6 +6,8 @@ import aiIcon from "../assets/ai-search.png";   // ✅ AI icon
 import { FaUserGraduate, FaBookOpen, FaUsers, FaHeadset } from "react-icons/fa";
 import CardPage from "../components/CardPage";
 import { useNavigate } from "react-router-dom";
+import About from "../components/About";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -69,6 +71,14 @@ const Home = () => {
       {/* POPULAR COURSES */}
       <section className="bg-black py-20 px-6 md:px-16">
         <CardPage />
+      </section>
+
+      <section className="bg-black py-20 px-6 md:px-16">
+        <About />
+      </section>
+
+      <section className="bg-black py-20 px-6 md:px-16">
+        <Footer />
       </section>
     </div>
   );
