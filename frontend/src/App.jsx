@@ -21,12 +21,14 @@ import EditLecture from './pages/educator/EditLecture'
 import CourseDetails from './pages/CourseDetails'
 import ViewLecture from './pages/ViewLecture'
 import MyEnrolledCourses from './pages/MyEnrolledCourses'
+import getAllReviews from './customHooks/getAllReviews'
 
 export const serverUrl = "http://localhost:8000"
 const App = () => {
   getCurrentUser();
   getCreatorCourse()
   getPublishedCourse()
+  getAllReviews()
   const {userData} = useSelector(state=>state.user)
   return (
     <>

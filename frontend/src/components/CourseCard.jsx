@@ -11,6 +11,16 @@ const CourseCard = ({ course }) => {
   const priceLabel =
     !course.price || Number(course.price) === 0 ? "Free" : `₹${course.price}`;
 
+    const calculateAvgReview = (reviews) => {
+    if(!reviews || reviews.length === 0) {
+      return 0;
+    }
+    const total = reviews.reduce((sum, review)=> sum + review.rating,0)
+    return (total/reviews.length).toFixed(1)
+  }
+
+  const avgRating = calculateAvgReview(course?.reviews)
+
   return (
     <div
       className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-orange-500 hover:border-2 transition cursor-pointer"
@@ -55,7 +65,7 @@ const CourseCard = ({ course }) => {
 
           <div className="flex items-center gap-1 text-yellow-400">
             <FaStar />
-            <span>{course.rating || "4.5"}</span>
+            <span>{avgRating}</span>
           </div>
         </div>
       </div>

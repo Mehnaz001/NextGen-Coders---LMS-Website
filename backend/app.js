@@ -5,6 +5,8 @@ import connectDB from './config/connectDB.js';
 import authRouter from './route/authRoute.js';
 import userRouter from './route/userRoute.js';
 import courseRouter from './route/courseRoute.js';
+import reviewRouter from './route/reviewRoute.js';
+
 
 import cors from 'cors'
 import paymentRouter from './route/paymentRoute.js';
@@ -25,6 +27,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter)
 app.use('/api/course', courseRouter)
 app.use('/api/order', paymentRouter)
+app.use('/api/review',reviewRouter)
 
 app.get('/', (req,res)=>{
     res.send("Hello World")

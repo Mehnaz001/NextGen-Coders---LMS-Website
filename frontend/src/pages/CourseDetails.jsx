@@ -6,6 +6,7 @@ import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import ReviewCard from "../components/ReviewCard";
 
 const CourseDetails = () => {
   const { courseId } = useParams();
@@ -20,7 +21,8 @@ const CourseDetails = () => {
   const [isEnroll, setIsEnroll] = useState(false)
 
   const [rating, setRating] = useState(0);
-  const [reviewText, setReviewText] = useState("");
+  const [comment, setComment] = useState("");
+  const {reviewData} = useSelector(state=>state.review)
 
   const fetchCourse = async () => {
     try {
@@ -42,6 +44,9 @@ const CourseDetails = () => {
     }
   };
 
+  const courseReviews = reviewData?.filter(
+  (review) => review.course?._id?.toString() === courseId?.toString()
+);
   const checkEnrollment = () => {
     const verify = userData?.enrolledCourses.some((c)=> (typeof c === 'string'? c: c._id).toString() === courseId?.toString())
     if(verify) {
@@ -79,13 +84,7 @@ const CourseDetails = () => {
     }
 
   }, [educator, courseData])
-  if (loading)
-    return (
-      <div className="min-h-screen bg-black flex justify-center items-center">
-        <ClipLoader color="orange" />
-      </div>
-    );
-
+  
   const handleEnroll = async (userId, courseId) => {
     try {
       const orderData = await axios.post(serverUrl + '/api/order/razorpay-order', { userId, courseId }, { withCredentials: true })
@@ -121,6 +120,37 @@ const CourseDetails = () => {
     }
   }
 
+  const handleReview = async() => {
+    setLoading(true)
+    try {
+      const res = await axios.post(serverUrl+`/api/review/createreview`, {rating,comment,courseId}, {withCredentials:true})
+      setLoading(false)
+      toast.success("Review Added")
+      console.log(res.data)
+    } catch (error) {
+      setLoading(false)
+      toast.error(error.response.data.message)
+      console.log(error)
+    }
+  }
+
+  const calculateAvgReview = (reviews) => {
+    if(!reviews || reviews.length === 0) {
+      return 0;
+    }
+    const total = reviews.reduce((sum, review)=> sum + review.rating,0)
+    return (total/reviews.length).toFixed(1)
+  }
+
+  const avgRating = calculateAvgReview(course?.reviews)
+  if (loading)
+    return (
+      <div className="min-h-screen bg-black flex justify-center items-center">
+        <ClipLoader color="orange" />
+      </div>
+    );
+
+
   return (
     <div className="min-h-screen bg-black text-white px-6 md:px-20 py-10">
       {/* 🔙 Back */}
@@ -150,7 +180,7 @@ const CourseDetails = () => {
 
             <div className="flex items-center gap-1 text-yellow-400">
               <FaStar />
-              <span>{course.rating || "4.5"}</span>
+              <span>{avgRating}</span>
             </div>
 
             <span className="text-xl font-semibold">
@@ -284,9 +314,8 @@ const CourseDetails = () => {
       {/* ⭐ Review Section */}
       <div className="mt-14">
         <h2 className="text-2xl font-semibold mb-6">
-          isko shi karna hai 
+          Give your feedback
         </h2>
-        yha ye extra likh hai 
 
         <div className="flex gap-3 text-2xl text-gray-400 mb-4">
           {[1, 2, 3, 4, 5].map((num) => (
@@ -300,16 +329,36 @@ const CourseDetails = () => {
         </div>
 
         <textarea
-          value={reviewText}
-          onChange={(e) => setReviewText(e.target.value)}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
           placeholder="Write your review..."
           className="w-full p-4 rounded-lg bg-black/40 border border-white/10 outline-none"
         />
 
-        <button className="mt-4 px-8 py-3 bg-orange-500 text-black rounded-full font-semibold">
-          Submit Review
+        <button className="mt-4 px-8 py-3 bg-orange-500 text-black rounded-full font-semibold"
+        onClick={handleReview}
+        disabled={loading}
+        >
+          {
+            loading?<ClipLoader></ClipLoader>:"Submit Review"
+          }
         </button>
       </div>
+      <div className="mt-14">
+  <h2 className="text-2xl font-semibold mb-6">
+    Student Reviews
+  </h2>
+
+  {courseReviews?.length === 0 ? (
+    <p className="text-gray-400">No reviews yet</p>
+  ) : (
+    <div className="space-y-4">
+      {courseReviews.map((review) => (
+        <ReviewCard key={review._id} review={review} />
+      ))}
+    </div>
+  )}
+</div>
     </div>
   );
 };
