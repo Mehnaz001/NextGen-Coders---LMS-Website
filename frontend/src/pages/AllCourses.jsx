@@ -83,7 +83,7 @@ const AllCourses = () => {
           </div>
 
           {/* AI Search */}
-          <div className="relative mb-6">
+          <div className="relative mb-6" onClick={()=> navigate('/search')}>
             <img
               src={aiSearch}
               alt="AI Search"

@@ -22,6 +22,7 @@ import CourseDetails from './pages/CourseDetails'
 import ViewLecture from './pages/ViewLecture'
 import MyEnrolledCourses from './pages/MyEnrolledCourses'
 import getAllReviews from './customHooks/getAllReviews'
+import SearchWithAi from './pages/searchWithAi'
 
 export const serverUrl = "http://localhost:8000"
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
         <Route path='/editlecture/:courseId/:lectureId' element={userData?.role === "educator"? <EditLecture/>: <Navigate to={'/signup'}/>} />
         <Route path="/viewlecture/:courseId" element={<ViewLecture/>} />
         <Route path='/mycourses' element={userData?<MyEnrolledCourses/>:<Navigate to={'/signup'}/>} />
+        <Route path='/search' element={<SearchWithAi/>} />
       </Routes>
 
     </>

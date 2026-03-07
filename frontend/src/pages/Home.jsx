@@ -48,7 +48,9 @@ const Home = () => {
             </button>
 
             {/* ✅ AI Search Button */}
-            <button className="px-8 py-3 rounded-full border bg-white border-white text-black flex items-center gap-3 font-semibold transition hover:bg-orange-500 hover:border-orange-500">
+            <button className="px-8 py-3 rounded-full border bg-white border-white text-black flex items-center gap-3 font-semibold transition hover:bg-orange-500 hover:border-orange-500"
+            onClick={()=> navigate('/search')}
+            >
               Search with AI
               <img src={aiIcon} alt="ai" className="w-8 h-7"  />
             </button>
