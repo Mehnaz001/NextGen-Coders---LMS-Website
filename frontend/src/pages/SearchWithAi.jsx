@@ -3,15 +3,16 @@ import { FaArrowLeft, FaSearch, FaMicrophone } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from 'axios'
-import {serverUrl} from '../App.jsx'
+import { serverUrl } from '../App.jsx'
 import start from '../assets/google-assistant.mp3'
+import CourseCard from "../components/CourseCard.jsx";
 
 const SearchWithAi = () => {
   const startSound = new Audio(start)
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [recommendations, setRecommendations] = useState([]);
-  const [listening,setListening] = useState(false)
+  const [listening, setListening] = useState(false)
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -43,14 +44,14 @@ const SearchWithAi = () => {
   };
 
   const handleSearch = async (query) => {
-    if (!input) return;
+    if (!query) return;
     setListening(true)
     try {
-      const result = await axios.post(serverUrl + `/api/course/search`,{input:query},{withCredentials:true} )
+      const result = await axios.post(serverUrl + `/api/course/search`, { input: query }, { withCredentials: true })
       console.log(result)
       setRecommendations(result.data)
       setListening(false)
-      if(result.data.length>0) {
+      if (result.data.length > 0) {
         speak("Here are some courses I found for you")
       } else {
         speak("No Courses found")
@@ -101,7 +102,7 @@ const SearchWithAi = () => {
 
           {/* Search */}
           <button
-            onClick={()=>handleSearch(input)}
+            onClick={() => handleSearch(input)}
             className="bg-orange-500 text-black px-4 py-2 rounded-full hover:bg-orange-400"
           >
             <FaSearch />
@@ -110,17 +111,18 @@ const SearchWithAi = () => {
         </div>
       </div>
 
-      {/* Results */}
-      <div className="max-w-4xl mx-auto mt-12">
-        {recommendations.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white/5 border border-white/10 rounded-xl p-5 mb-4"
-          >
-            <h3 className="text-lg font-semibold">{item.title}</h3>
-            <p className="text-gray-400 text-sm">{item.description}</p>
-          </div>
+      <div className="max-w-6xl mx-auto mt-12 grid gap-6 md:grid-cols-3">
+
+        {recommendations.length === 0 && !listening && (
+          <p className="text-center text-gray-400">
+            No courses found. Try searching something else.
+          </p>
+        )}
+
+        {recommendations.map((course) => (
+          <CourseCard key={course._id} course={course} />
         ))}
+
       </div>
 
     </div>
