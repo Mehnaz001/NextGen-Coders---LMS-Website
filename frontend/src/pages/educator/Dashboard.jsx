@@ -144,7 +144,7 @@ const Dashboard = () => {
         </div>
 
         <button
-          onClick={() => navigate("/courses")}
+          onClick={() => navigate("/createcourse")}
           className="px-6 py-2 bg-orange-500 text-black rounded-full flex items-center gap-2 hover:bg-orange-400 transition"
         >
           <FaPlus />

@@ -1,58 +1,47 @@
 import React from "react";
-import { FaCode, FaRocket, FaUsers, FaLaptopCode } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import dev from "../assets/about.png";
 
 const About = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="relative bg-gradient-to-br from-[#111] to-[#1a1a1a] border border-white/10 rounded-2xl p-10 mb-16 overflow-hidden">
+    <div className="px-6 md:px-16">
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-10 transition duration-300">
 
-      {/* Glow Effect */}
-      <div className="absolute -top-20 -right-20 w-60 h-60 bg-orange-500/10 blur-3xl rounded-full"></div>
+        <div className="grid md:grid-cols-2 gap-10 items-center">
 
-      <h2 className="text-3xl font-bold mb-6 flex items-center gap-3 text-white">
-        <span className="p-3 bg-orange-500/20 rounded-xl text-orange-500">
-          <FaCode />
-        </span>
-        About This Platform
-      </h2>
+          {/* TEXT */}
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              About <span className="text-orange-500">NextGen Coders</span>
+            </h2>
 
-      <p className="text-gray-400 leading-relaxed mb-8 max-w-3xl">
-        Welcome to our modern learning platform designed to help developers
-        grow faster with structured and practical courses. We focus on real-world
-        projects, clean coding practices, and step-by-step guidance to build
-        strong fundamentals.
-      </p>
+            <p className="text-gray-400 mt-6 leading-relaxed text-sm md:text-base">
+              NextGen Coders is a modern learning platform built to help
+              developers grow through structured courses and real-world
+              projects. Our goal is to make coding easier to understand
+              and help learners build practical skills for the tech
+              industry.
+            </p>
 
-      {/* Features Grid */}
-      <div className="grid md:grid-cols-3 gap-6">
+            <button
+              onClick={() => navigate("/about")}
+              className="mt-6 px-6 py-3 bg-orange-500 text-black rounded-full font-semibold hover:bg-orange-400 transition"
+            >
+              Know More
+            </button>
+          </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-orange-500 transition">
-          <FaRocket className="text-orange-500 text-2xl mb-3" />
-          <h4 className="font-semibold text-white mb-2">
-            Practical Learning
-          </h4>
-          <p className="text-gray-400 text-sm">
-            Learn by building real projects instead of just watching tutorials.
-          </p>
-        </div>
+          {/* IMAGE */}
+          <div className="flex justify-center">
+            <img
+              src={dev}
+              alt="about"
+              className="w-72 md:w-[420px] opacity-90"
+            />
+          </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-orange-500 transition">
-          <FaLaptopCode className="text-orange-500 text-2xl mb-3" />
-          <h4 className="font-semibold text-white mb-2">
-            Modern Tech Stack
-          </h4>
-          <p className="text-gray-400 text-sm">
-            Explore MERN stack, AI/ML, and other trending technologies.
-          </p>
-        </div>
-
-        <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-orange-500 transition">
-          <FaUsers className="text-orange-500 text-2xl mb-3" />
-          <h4 className="font-semibold text-white mb-2">
-            Community Support
-          </h4>
-          <p className="text-gray-400 text-sm">
-            Learn together, grow together with peer support and guidance.
-          </p>
         </div>
 
       </div>

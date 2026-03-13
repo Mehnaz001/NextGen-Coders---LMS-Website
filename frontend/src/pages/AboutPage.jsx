@@ -1,74 +1,129 @@
 import React from "react";
-import Nav from "../components/Nav"; 
-import { FaCode, FaRocket, FaUsers, FaLaptopCode } from "react-icons/fa";
+import Nav from "../components/Nav";
+import { FaCode, FaLaptopCode, FaUsers } from "react-icons/fa";
+import dev from "../assets/about.png";
+import me from "../assets/mehnaz.jpg";
+import Footer from "../components/Footer";
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-black">
-      {/* Navbar */}
+    <div className="min-h-screen bg-black text-white">
       <Nav />
 
-      <div className="px-6 py-32 max-w-7xl mx-auto space-y-16">
+      <div className="max-w-7xl mx-auto px-6 pt-28 md:pt-32 pb-20 space-y-20">
 
-        {/* Hero / About Intro */}
-        <div className="relative bg-gray-900/80 border border-white/10 rounded-2xl p-10 overflow-hidden shadow-lg">
-          {/* Glow effect */}
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-orange-500/20 blur-3xl rounded-full"></div>
+        {/* HERO */}
+        <section className="grid md:grid-cols-2 gap-10 items-center">
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 flex items-center gap-3 text-white">
-            <span className="p-3 bg-orange-500/20 rounded-xl text-orange-500">
-              <FaCode />
-            </span>
-            About NextGen Coders
-          </h1>
+          {/* TEXT */}
+          <div>
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+              Building the{" "}
+              <span className="text-orange-500">Next Generation</span> of
+              Developers
+            </h1>
 
-          <p className="text-gray-300 leading-relaxed mb-8 max-w-3xl">
-            Welcome to NextGen Coders, a modern learning platform designed to help
-            developers grow faster with structured and practical courses. We focus
-            on real-world projects, clean coding practices, and step-by-step guidance
-            to build strong fundamentals.
+            <p className="text-gray-400 mt-6 leading-relaxed">
+              NextGen Coders is a modern learning platform designed to help
+              developers learn faster through real projects, practical
+              concepts, and structured learning paths.
+            </p>
+
+            <p className="text-gray-400 mt-4">
+              Instead of endless tutorials, we focus on building real skills
+              that help learners grow as developers.
+            </p>
+          </div>
+
+          {/* IMAGE */}
+          <div className="flex justify-center">
+            <img
+              src={dev}
+              alt="developer"
+              className="w-72 md:w-[420px] opacity-90"
+            />
+          </div>
+        </section>
+
+        {/* ABOUT PLATFORM */}
+        <section className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-10">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            What is <span className="text-orange-500">NextGen Coders?</span>
+          </h2>
+
+          <p className="text-gray-400 leading-relaxed max-w-4xl">
+            NextGen Coders is built for students and developers who want
+            structured and practical learning. The platform focuses on
+            real-world development, modern technologies, and hands-on
+            projects so learners can build skills that matter in the
+            industry.
           </p>
-        </div>
+        </section>
 
-        {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-gray-800/60 border border-white/10 rounded-xl p-6 hover:border-orange-500 transition shadow-md">
-            <FaRocket className="text-orange-500 text-2xl mb-3" />
-            <h4 className="font-semibold text-white mb-2">Practical Learning</h4>
-            <p className="text-gray-300 text-sm">
+        {/* FEATURES */}
+        <section className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+          <div className="bg-white/5 border border-white/10 p-6 rounded-xl hover:border-orange-500 transition">
+            <FaCode className="text-orange-500 text-2xl mb-3" />
+            <h3 className="font-semibold mb-2">Project Based Learning</h3>
+            <p className="text-gray-400 text-sm">
               Learn by building real projects instead of just watching tutorials.
             </p>
           </div>
 
-          <div className="bg-gray-800/60 border border-white/10 rounded-xl p-6 hover:border-orange-500 transition shadow-md">
+          <div className="bg-white/5 border border-white/10 p-6 rounded-xl hover:border-orange-500 transition">
             <FaLaptopCode className="text-orange-500 text-2xl mb-3" />
-            <h4 className="font-semibold text-white mb-2">Modern Tech Stack</h4>
-            <p className="text-gray-300 text-sm">
-              Explore MERN stack, AI/ML, and other trending technologies.
+            <h3 className="font-semibold mb-2">Modern Tech</h3>
+            <p className="text-gray-400 text-sm">
+              Learn trending technologies like MERN stack, AI/ML and cloud.
             </p>
           </div>
 
-          <div className="bg-gray-800/60 border border-white/10 rounded-xl p-6 hover:border-orange-500 transition shadow-md">
+          <div className="bg-white/5 border border-white/10 p-6 rounded-xl hover:border-orange-500 transition">
             <FaUsers className="text-orange-500 text-2xl mb-3" />
-            <h4 className="font-semibold text-white mb-2">Community Support</h4>
-            <p className="text-gray-300 text-sm">
-              Learn together, grow together with peer support and guidance.
+            <h3 className="font-semibold mb-2">Community Growth</h3>
+            <p className="text-gray-400 text-sm">
+              Learn together with a community focused on growth and support.
             </p>
           </div>
-        </div>
 
-        {/* Mission / Vision Section */}
-        <div className="relative bg-gray-900/80 border border-white/10 rounded-2xl p-10 overflow-hidden shadow-lg">
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-orange-500/20 blur-3xl rounded-full"></div>
+        </section>
 
-          <h2 className="text-3xl font-bold mb-6 text-white">Our Mission</h2>
-          <p className="text-gray-300 max-w-3xl leading-relaxed">
-            Our mission is to make coding accessible, engaging, and practical for everyone.
-            We provide learners with structured guidance, real-world projects, and
-            a supportive community to help them grow as developers and future tech leaders.
-          </p>
-        </div>
+        {/* CREATOR */}
+        <section className="grid md:grid-cols-2 md:gap-0 gap-10 items-center">
+
+          {/* IMAGE */}
+          <div className="flex justify-center">
+            <img
+              src={me}
+              alt="Mehnaz Sheikh"
+              className="w-50 h-50 md:w-60 md:h-60 object-cover rounded-full hover:border-2 border-orange-500 shadow-lg"
+            />
+          </div>
+
+          {/* TEXT */}
+          <div className="text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Built by <span className="text-orange-500">Mehnaz Sheikh</span>
+            </h2>
+
+            <p className="text-gray-400 leading-relaxed">
+              Hi, I'm Mehnaz Sheikh, a developer passionate about building
+              platforms that help students learn technology in a practical
+              and structured way.
+            </p>
+
+            <p className="text-gray-400 mt-4">
+              This platform is built with the goal of making coding easier
+              to understand and more accessible for learners who want to
+              grow in the tech industry.
+            </p>
+          </div>
+
+        </section>
+
       </div>
+      <Footer/>
     </div>
   );
 };

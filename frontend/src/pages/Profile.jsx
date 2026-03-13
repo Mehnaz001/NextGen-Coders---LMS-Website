@@ -68,7 +68,7 @@ const Profile = () => {
               </div>
 
               {/* Edit Button */}
-              <button className="flex items-center gap-2 px-6 py-2 rounded-full bg-orange-500 text-white font-semibold hover:bg-orange-600 transition" onClick={()=>navigate('/profile/edit')}>
+              <button className="flex items-center gap-2 px-6 w-40 md:w-50 md:px-6 py-3 rounded-full bg-orange-500 text-white font-semibold hover:bg-orange-600 transition" onClick={()=>navigate('/profile/edit')}>
                 <FaEdit />
                 Edit Profile
               </button>

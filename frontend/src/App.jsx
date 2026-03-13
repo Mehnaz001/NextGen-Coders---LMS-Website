@@ -24,6 +24,7 @@ import MyEnrolledCourses from './pages/MyEnrolledCourses'
 import getAllReviews from './customHooks/getAllReviews'
 import SearchWithAi from './pages/searchWithAi'
 import AboutPage from './pages/AboutPage'
+import './App.css'
 
 export const serverUrl = "http://localhost:8000"
 const App = () => {
