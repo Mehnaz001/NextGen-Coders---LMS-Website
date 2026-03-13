@@ -25,10 +25,9 @@ const EditCourses = () => {
   const [course, setCourse] = useState({});
   const [thumbnail, setThumbnail] = useState(null);
   const [preview, setPreview] = useState("");
-  const [loading,setLoading] = useState(false)
-  const [deleting,setDeleting] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-  // Fetch course
   useEffect(() => {
     fetchCourse();
   }, []);
@@ -41,19 +40,21 @@ const EditCourses = () => {
       );
       setCourse(res.data);
       setPreview(res.data.thumbnail);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load course");
     }
   };
 
-  // Update course
   const handleSave = async () => {
-    setLoading(true)
+    setLoading(true);
+
     try {
       const formData = new FormData();
+
       Object.keys(course).forEach((key) => {
         formData.append(key, course[key]);
       });
+
       if (thumbnail) formData.append("thumbnail", thumbnail);
 
       await axios.post(
@@ -61,51 +62,54 @@ const EditCourses = () => {
         formData,
         { withCredentials: true }
       );
-      
-      setLoading(false)
-      navigate('/courses')
+
       toast.success("Course updated");
-      
-    } catch (err) {
-      setLoading(false)
+      navigate("/courses");
+    } catch {
       toast.error("Update failed");
     }
+
+    setLoading(false);
   };
 
-  // Delete
   const handleDelete = async () => {
-    setDeleting(true)
+    setDeleting(true);
+
     try {
       await axios.get(
         `${serverUrl}/api/course/remove/${courseId}`,
         { withCredentials: true }
       );
-      setDeleting(false)
+
       toast.success("Course removed");
       navigate("/courses");
-    } catch (err) {
-      setDeleting(false)
+    } catch {
       toast.error("Delete failed");
     }
+
+    setDeleting(false);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 md:px-20 py-10">
-      {/* Back */}
+    <div className="min-h-screen bg-black text-white px-4 sm:px-6 md:px-20 py-8">
+
+      {/* BACK */}
       <button
         onClick={() => navigate("/courses")}
-        className="flex items-center gap-2 text-gray-300 hover:text-orange-500 mb-8"
+        className="flex items-center gap-2 text-gray-300 hover:text-orange-500 mb-6"
       >
         <FaArrowLeft />
         Back to Courses
       </button>
 
-      <div className="grid md:grid-cols-3 gap-10">
-        {/* LEFT FORM */}
-        <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-8 space-y-6">
-          <h1 className="text-2xl font-bold">Edit Course</h1>
+      {/* MAIN GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
 
-          {/* Title */}
+        {/* LEFT FORM */}
+        <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 md:p-8 space-y-6">
+
+          <h1 className="text-xl sm:text-2xl font-bold">Edit Course</h1>
+
           <Input
             label="Title"
             value={course.title || ""}
@@ -114,7 +118,6 @@ const EditCourses = () => {
             }
           />
 
-          {/* Subtitle */}
           <Input
             label="Subtitle"
             value={course.subTitle || ""}
@@ -123,7 +126,6 @@ const EditCourses = () => {
             }
           />
 
-          {/* Description */}
           <Textarea
             label="Description"
             value={course.description || ""}
@@ -132,7 +134,6 @@ const EditCourses = () => {
             }
           />
 
-          {/* Category */}
           <Select
             label="Category"
             value={course.category}
@@ -142,7 +143,6 @@ const EditCourses = () => {
             }
           />
 
-          {/* Level */}
           <Select
             label="Level"
             value={course.level}
@@ -152,7 +152,6 @@ const EditCourses = () => {
             }
           />
 
-          {/* Price */}
           <Input
             label="Price (₹)"
             type="number"
@@ -162,7 +161,6 @@ const EditCourses = () => {
             }
           />
 
-          {/* Publish */}
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
@@ -174,34 +172,43 @@ const EditCourses = () => {
             <span>Publish this course</span>
           </div>
 
-          {/* Buttons */}
-          <div className="flex gap-4 mt-6">
+          {/* BUTTONS */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-6">
+
             <button
               disabled={loading}
               onClick={handleSave}
-              className="px-6 py-3 bg-orange-500 text-black rounded-full font-semibold"
+              className="px-6 py-3 bg-orange-500 text-black rounded-full font-semibold flex items-center justify-center"
             >
-              {loading? <ClipLoader color="black" size={30}/>:"Save Changes"}
+              {loading ? (
+                <ClipLoader color="black" size={22} />
+              ) : (
+                "Save Changes"
+              )}
             </button>
 
             <button
               onClick={() => navigate(`/createlecture/${courseId}`)}
-              className="px-6 py-3 border border-white/20 rounded-full flex items-center gap-2"
+              className="px-6 py-3 border border-white/20 rounded-full flex items-center justify-center gap-2"
             >
               <FaBook />
               Go to Lectures
             </button>
+
           </div>
         </div>
 
         {/* RIGHT THUMBNAIL */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-fit">
-          <h2 className="text-lg font-semibold mb-4">Thumbnail</h2>
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 h-fit">
+
+          <h2 className="text-lg font-semibold mb-4">
+            Thumbnail
+          </h2>
 
           <img
             src={preview}
             alt="preview"
-            className="w-full h-48 object-cover rounded-xl mb-4 border border-white/20"
+            className="w-full h-40 sm:h-48 object-cover rounded-xl mb-4 border border-white/20"
           />
 
           <input
@@ -218,8 +225,15 @@ const EditCourses = () => {
             onClick={handleDelete}
             className="mt-6 w-full py-2 bg-red-600 rounded-full flex items-center justify-center gap-2"
           >
-            {deleting? (<ClipLoader color="white" size={30}/>): ( <> <FaTrash /> Remove Course </>)}
+            {deleting ? (
+              <ClipLoader color="white" size={22} />
+            ) : (
+              <>
+                <FaTrash /> Remove Course
+              </>
+            )}
           </button>
+
         </div>
       </div>
     </div>

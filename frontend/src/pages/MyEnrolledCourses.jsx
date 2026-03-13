@@ -8,7 +8,7 @@ const MyEnrolledCourses = () => {
   const { userData } = useSelector((state) => state.user);
 
   const enrolledCourses = userData?.enrolledCourses || [];
-
+  console.log(enrolledCourses)
   return (
     <div className="min-h-screen bg-black text-white px-6 md:px-20 py-10">
 

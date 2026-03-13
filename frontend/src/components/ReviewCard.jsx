@@ -3,30 +3,35 @@ import { FaStar } from "react-icons/fa";
 
 const ReviewCard = ({ review }) => {
   return (
-    <div className="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-orange-500 transition">
+    <div className="bg-black/40 border border-gray-800 rounded-xl p-6 hover:border-orange-500 transition duration-300">
 
       {/* User */}
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-3 mb-4">
+
         <img
           src={review?.user?.photoUrl}
           alt=""
-          className="w-12 h-12 rounded-full object-cover"
+          className="w-11 h-11 rounded-full object-cover border border-gray-700"
         />
 
-        <div>
-          <h3 className="font-semibold text-white">
+        <div className="flex flex-col">
+          <h3 className="text-white text-sm font-semibold">
             {review?.user?.name}
           </h3>
-          <p className="text-gray-400 text-sm">
+
+          <p className="text-gray-500 text-xs">
             {review?.user?.role}
           </p>
         </div>
+
       </div>
 
+
       {/* Course */}
-      <p className="text-orange-500 text-sm mb-3">
+      <p className="text-orange-500 text-xs font-medium mb-2">
         {review?.course?.title}
       </p>
+
 
       {/* Rating */}
       <div className="flex gap-1 mb-3">
@@ -36,19 +41,21 @@ const ReviewCard = ({ review }) => {
             className={
               i < review?.rating
                 ? "text-orange-500"
-                : "text-gray-600"
+                : "text-gray-700"
             }
           />
         ))}
       </div>
 
+
       {/* Comment */}
-      <p className="text-gray-400 text-sm">
+      <p className="text-gray-400 text-sm leading-relaxed">
         {review?.comment}
       </p>
 
+
       {/* Date */}
-      <p className="text-gray-500 text-xs mt-4">
+      <p className="text-gray-600 text-xs mt-4">
         {new Date(review?.reviewedAt).toLocaleDateString()}
       </p>
 

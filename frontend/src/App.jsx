@@ -1,5 +1,5 @@
 import React from 'react'
-import Home from './pages/home'
+import Home from './pages/Home'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import SignUp from './pages/SignUp'
 import Login from './pages/Login'
@@ -23,6 +23,8 @@ import ViewLecture from './pages/ViewLecture'
 import MyEnrolledCourses from './pages/MyEnrolledCourses'
 import getAllReviews from './customHooks/getAllReviews'
 import SearchWithAi from './pages/searchWithAi'
+import AboutPage from './pages/AboutPage'
+import './App.css'
 
 export const serverUrl = "http://localhost:8000"
 const App = () => {
@@ -36,6 +38,7 @@ const App = () => {
     <ToastContainer />
       <Routes>
         <Route path='/' element={<Home/>} />
+        <Route path='/about' element={<AboutPage/>} />
         <Route path='/signup' element={!userData? <SignUp/>:<Navigate to={'/'}/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/profile' element={userData?<Profile/>:<Navigate to={'/signup'}/>} />
