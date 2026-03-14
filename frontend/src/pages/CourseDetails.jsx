@@ -118,6 +118,33 @@ const CourseDetails = () => {
 
   const avgRating = calculateAvgReview(course?.reviews);
 
+  const handleEnroll = async (userId,courseId) => {
+    try {
+      const orderData = await axios.post(serverUrl+`/api/order-razorpay-order`, {userId,courseId},{withCredentials:true})
+      const options = { 
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.data.amount,
+        currency: 'INR',
+        name: "Mehnaz Codes",
+        description: "Course Enroll Payment",
+        order_id: orderData.data.id,
+        handler: async function (response) {
+          console.log("Razorpay Payment", response)
+          try {
+            const verifyPayment = await axios.post(serverUrl + '/api/order/verifypayment', { ...response, courseId, userId }, { withCredentials: true })
+            setIsEnroll(true) 
+            toast.success(verifyPayment.data.message)
+          } catch (error) {
+            toast.error(error.response.data.message)
+          }
+        }
+      }
+        const rzp = new window.Razorpay(options) 
+        rzp.open()
+    } catch (error) {
+      toast.error( error?.response?.data?.message || error?.message || "Something went wrong" );
+    }
+  }
   const handleReview = async () => {
 
     try {
@@ -216,7 +243,7 @@ const CourseDetails = () => {
                 if (!userData) {
                   navigate("/signup");
                 } else {
-                  handleEnroll(); // your enroll function
+                  handleEnroll();
                 }
               }}
               className="mt-4 px-8 py-3 bg-orange-500 rounded-full text-black font-semibold hover:bg-orange-400 transition"
