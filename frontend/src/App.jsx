@@ -22,7 +22,7 @@ import CourseDetails from './pages/CourseDetails'
 import ViewLecture from './pages/ViewLecture'
 import MyEnrolledCourses from './pages/MyEnrolledCourses'
 import getAllReviews from './customHooks/getAllReviews'
-import SearchWithAi from './pages/searchWithAi'
+import SearchWithAi from './pages/SearchWithAi'
 import AboutPage from './pages/AboutPage'
 import './App.css'
 
