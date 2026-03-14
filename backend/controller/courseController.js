@@ -89,6 +89,10 @@ export const removeCourse = async (req, res) => {
         if(!course) {
             return res.status(404).json({message:"Course not found"})
         }
+        if (course.lectures && course.lectures.length > 0) {
+            await Lecture.deleteMany({ _id: { $in: course.lectures } });
+        }
+        await Review.deleteMany({ course: courseId });
         await Course.findByIdAndDelete(courseId, {new:true})
         return res.status(200).json({json:"Course removed"})
     } catch (error) {
