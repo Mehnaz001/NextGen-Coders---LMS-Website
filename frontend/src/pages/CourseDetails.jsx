@@ -120,7 +120,7 @@ const CourseDetails = () => {
 
   const handleEnroll = async (userId,courseId) => {
     try {
-      const orderData = await axios.post(serverUrl+`/api/order-razorpay-order`, {userId,courseId},{withCredentials:true})
+      const orderData = await axios.post(serverUrl+`/api/order/razorpay-order`, {userId,courseId},{withCredentials:true})
       const options = { 
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: orderData.data.amount,
