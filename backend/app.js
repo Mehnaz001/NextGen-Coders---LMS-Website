@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://next-gen-coders-lms-website-g8a1.vercel.app/",
+    origin: "https://next-gen-coders-lms-website-g8a1.vercel.app",
     credentials:true
 }))
 
