@@ -26,7 +26,7 @@ import SearchWithAi from './pages/searchWithAi'
 import AboutPage from './pages/AboutPage'
 import './App.css'
 
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = "https://nextgen-coders-lms-website.onrender.com"
 const App = () => {
   getCurrentUser();
   getCreatorCourse()
