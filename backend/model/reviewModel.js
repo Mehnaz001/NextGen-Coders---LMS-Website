@@ -24,6 +24,10 @@ const reviewSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
+// Add indexes for faster queries
+reviewSchema.index({ course: 1 });
+reviewSchema.index({ user: 1 });
+
 const Review = mongoose.model('Review',reviewSchema)
 
 export default Review

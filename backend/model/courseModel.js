@@ -47,6 +47,10 @@ const courseSchema = new mongoose.Schema({
 },{timeStamps:true}
 )
 
+// Add indexes for performance
+courseSchema.index({ isPublished: 1 });
+courseSchema.index({ creator: 1 });
+
 const Course = mongoose.model("Course", courseSchema)
 
 export default Course

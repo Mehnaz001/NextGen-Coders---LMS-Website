@@ -109,7 +109,7 @@ const Nav = () => {
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div className="absolute top-20 left-0 w-full px-4 py-4 bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/20 rounded-xl md:hidden space-y-3 z-50">
+        <div className="absolute top-20 left-0 w-full px-4 py-4 bg-black backdrop-blur-xl border border-white/20 rounded-xl md:hidden space-y-3 z-50">
           {!userData ? (
             <button
               onClick={() => { navigate("/login"); setMenuOpen(false); }}

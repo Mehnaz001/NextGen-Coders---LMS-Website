@@ -82,7 +82,7 @@ const SearchWithAi = () => {
           AI Smart Search
         </h1>
 
-        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-4 py-3">
+        <div className="flex items-center gap-2 sm:gap-3 bg-white/5 border border-white/10 rounded-full px-4 py-3">
 
           <input
             type="text"

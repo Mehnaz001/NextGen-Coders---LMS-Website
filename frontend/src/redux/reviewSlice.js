@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const reviewSlice = createSlice({
     name: 'review',
-    initialState : {
-        reviewData : []
+    initialState: {
+        reviewData: null  
     },
-    reducers : {
-        setReviewData : (state,action) => {
+    reducers: {
+        setReviewData: (state, action) => {
             state.reviewData = action.payload;
         }
     }
 })
 
-export const {setReviewData} = reviewSlice.actions;
+export const { setReviewData } = reviewSlice.actions;
 export default reviewSlice.reducer;

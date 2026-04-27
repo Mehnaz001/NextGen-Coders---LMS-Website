@@ -25,11 +25,30 @@ export const createCourse = async(req,res) => {
 
 export const getPublishedCourses = async (req,res) => {
     try {
-        const courses = await Course.find({isPublished:true}).populate("lectures reviews")
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        
+        const courses = await Course.find({isPublished:true})
+            .select('title thumbnail price category level creator enrolledStudents')
+            .skip(skip)
+            .limit(limit)
+            .lean();
+        
+        const total = await Course.countDocuments({isPublished:true});
+        
         if(!courses) {
             return res.status(400).json({message:"Course not found"})
         }
-        return res.status(200).json(courses)
+        return res.status(200).json({
+            courses,
+            pagination: {
+                total,
+                page,
+                limit,
+                pages: Math.ceil(total / limit)
+            }
+        })
     } catch (error) {
         return res.status(500).json({message: `Failed to find published courses ${error}`})
     }
@@ -62,7 +81,7 @@ export const editCourse = async (req,res) => {
         }
 
         const updateData = {title, subTitle, description, category, level, isPublished, price, thumbnail}
-        await Course.findByIdAndUpdate(courseId, updateData, {new:true})
+        course = await Course.findByIdAndUpdate(courseId, updateData, {new:true})
         return res.status(200).json(course)
     } catch (error) {
         return res.status(500).json({message: `Failed to edit Course ${error}`}) 
@@ -112,16 +131,13 @@ export const createLecture = async (req,res) => {
         }
 
         const lecture = await Lecture.create({lectureTitle})
-        const course = await Course.findById(courseId)
+        const course = await Course.findByIdAndUpdate(
+            courseId,
+            {$push: {lectures: lecture._id}},
+            {new: true}
+        )
 
-        if(course) {
-           await course.lectures.push(lecture._id)
-        }
-
-        await course.populate("lectures")
-        await course.save()
-
-        return res.status(201).json({course,lecture})
+        return res.status(201).json({course, lecture})
     } catch (error) {
         return res.status(500).json({message: `Failed to create lecture ${error}`})
     }
@@ -130,12 +146,10 @@ export const createLecture = async (req,res) => {
 export const getCourseLecture = async (req,res) => {
     try {
         const {courseId} = req.params
-        const course = await Course.findById(courseId)
+        const course = await Course.findById(courseId).populate("lectures")
         if(!course) {
             return res.status(404).json({message:"Course not found"})
         }
-        await course.populate("lectures")
-        await course.save()
         return res.status(200).json({course})
     } catch (error) {
         return res.status(500).json({message: `Failed to getCourseLecture ${error}`})
@@ -201,3 +215,35 @@ export const getCreatorById = async (req,res) => {
         return res.status(500).json({message: `Failed to get Creator ${error}`})
     }
 }
+
+export const freeEnroll = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { courseId } = req.body;
+
+    const course = await Course.findById(courseId);
+    if (!course) return res.status(404).json({ message: "Course not found" });
+
+    if (course.price > 0) {
+      return res.status(400).json({ message: "This is a paid course" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const alreadyEnrolled = user.enrolledCourses.some(
+      (c) => c.toString() === courseId.toString()
+    );
+
+    if (alreadyEnrolled) {
+      return res.status(400).json({ message: "Already enrolled" });
+    }
+
+    user.enrolledCourses.push(courseId);
+    await user.save();
+
+    res.status(200).json({ message: "Enrolled successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

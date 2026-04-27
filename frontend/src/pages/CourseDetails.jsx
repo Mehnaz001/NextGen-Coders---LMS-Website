@@ -26,21 +26,13 @@ const CourseDetails = () => {
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-
+  const isFree = course?.price === 0;
   const fetchCourse = async () => {
     try {
-
-      let selected = courseData.find((c) => c._id === courseId);
-
-      if (!selected) {
-        const res = await axios.get(
-          `${serverUrl}/api/course/getcourse/${courseId}`
-        );
-        selected = res.data;
-      }
-
-      setCourse(selected);
-
+      const res = await axios.get(
+        `${serverUrl}/api/course/getcourse/${courseId}`, { withCredentials: true }
+      );
+      setCourse(res.data);
     } catch (err) {
       console.log(err);
     } finally {
@@ -116,12 +108,12 @@ const CourseDetails = () => {
     return (total / reviews.length).toFixed(1);
   };
 
-  const avgRating = calculateAvgReview(course?.reviews);
+  const avgRating = calculateAvgReview(courseReviews);
 
-  const handleEnroll = async (userId,courseId) => {
+  const handleEnroll = async (userId, courseId) => {
     try {
-      const orderData = await axios.post(serverUrl+`/api/order-razorpay-order`, {userId,courseId},{withCredentials:true})
-      const options = { 
+      const orderData = await axios.post(serverUrl + `/api/order/razorpay-order`, { userId, courseId }, { withCredentials: true })
+      const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: orderData.data.amount,
         currency: 'INR',
@@ -132,19 +124,33 @@ const CourseDetails = () => {
           console.log("Razorpay Payment", response)
           try {
             const verifyPayment = await axios.post(serverUrl + '/api/order/verifypayment', { ...response, courseId, userId }, { withCredentials: true })
-            setIsEnroll(true) 
+            setIsEnroll(true)
             toast.success(verifyPayment.data.message)
           } catch (error) {
             toast.error(error.response.data.message)
           }
         }
       }
-        const rzp = new window.Razorpay(options) 
-        rzp.open()
+      const rzp = new window.Razorpay(options)
+      rzp.open()
     } catch (error) {
-      toast.error( error?.response?.data?.message || error?.message || "Something went wrong" );
+      toast.error(error?.response?.data?.message || error?.message || "Something went wrong");
     }
   }
+  const handleFreeEnroll = async (courseId) => {
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/course/free-enroll`,
+        { courseId },
+        { withCredentials: true }
+      );
+
+      setIsEnroll(true);
+      toast.success(res.data.message || "Enrolled successfully");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error enrolling");
+    }
+  };
   const handleReview = async () => {
 
     try {
@@ -212,6 +218,10 @@ const CourseDetails = () => {
               <span>{avgRating}</span>
             </div>
 
+            <span>
+              {course.price === 0 ? "Free" : `₹${course.price}`}
+            </span>
+
           </div>
 
           {educator && (
@@ -231,27 +241,27 @@ const CourseDetails = () => {
           )}
 
           {isEnroll ? (
-            <button
-              onClick={() => navigate(`/viewlecture/${courseId}`)}
-              className="mt-4 px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.6)] hover:shadow-[0_0_25px_rgba(249,115,22,0.9)] hover:scale-105 transition-all duration-300"
-            >
+            <button onClick={() => navigate(`/viewlecture/${courseId}`)} className="mt-4 px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.6)] hover:shadow-[0_0_25px_rgba(249,115,22,0.9)] hover:scale-105 transition-all duration-300">
               Watch Now
             </button>
           ) : (
             <button
+              className="mt-4 px-8 py-3 bg-orange-500 rounded-full text-black font-semibold hover:bg-orange-400 transition"
               onClick={() => {
                 if (!userData) {
                   navigate("/signup");
                 } else {
-                  handleEnroll();
+                  if (isFree) {
+                    handleFreeEnroll(courseId);
+                  } else {
+                    handleEnroll(userData._id, courseId);
+                  }
                 }
               }}
-              className="mt-4 px-8 py-3 bg-orange-500 rounded-full text-black font-semibold hover:bg-orange-400 transition"
             >
-              Enroll Now
+              {isFree ? "Enroll Free" : "Enroll Now"}
             </button>
           )}
-
         </div>
 
       </div>
@@ -384,7 +394,9 @@ const CourseDetails = () => {
 
                   <div className="flex items-center justify-between text-xs text-gray-400">
 
-                    <span>₹{item.price}</span>
+                    <span>
+                      {item.price === 0 ? "Free" : `₹${item.price}`}
+                    </span>
 
                     <div className="flex items-center gap-1 text-yellow-400">
                       <FaStar size={10} />

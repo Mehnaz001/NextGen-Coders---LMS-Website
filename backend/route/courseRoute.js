@@ -3,6 +3,7 @@ import { createCourse, createLecture, editCourse, editLecture, getCourseById, ge
 import upload from '../middleware/multer.js';
 import isAuth from '../middleware/isAuth.js';
 import { searchWithAi } from "../controller/searchContoller.js";
+import { freeEnroll } from "../controller/courseController.js";
 
 const courseRouter = express.Router()
 
@@ -13,6 +14,7 @@ courseRouter.get('/getpublished', getPublishedCourses)
 courseRouter.get('/getcreator', isAuth, getCreatorCourses)
 courseRouter.get('/getcourse/:courseId', isAuth, getCourseById)
 courseRouter.get('/remove/:courseId', isAuth, removeCourse)
+courseRouter.post('/free-enroll', isAuth, freeEnroll);
 
 //For lectures
 courseRouter.post('/createlecture/:courseId', isAuth, createLecture)
