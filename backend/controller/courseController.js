@@ -30,7 +30,8 @@ export const getPublishedCourses = async (req,res) => {
         const skip = (page - 1) * limit;
         
         const courses = await Course.find({isPublished:true})
-            .select('title thumbnail price category level creator enrolledStudents')
+            .select('title thumbnail price category level creator enrolledStudents reviews')
+            .populate({ path: 'reviews', select: 'rating' })
             .skip(skip)
             .limit(limit)
             .lean();

@@ -14,7 +14,10 @@ const useGetCurrentUser = () => {
                 // ✅ Controller returns { ...userData, enrolledCourses, pagination }
                 dispatch(setUserData(result.data))
             } catch (error) {
-                console.log(error)
+                const status = error.response?.status;
+                if (status && status !== 400 && status !== 401) {
+                    console.error(error);
+                }
                 dispatch(setUserData(null))
             }
         }

@@ -4,11 +4,16 @@ import { FaArrowLeft, FaStar, FaLock } from "react-icons/fa";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ReviewCard from "../components/ReviewCard";
+import useGetAllReviews from "../customHooks/getAllReviews.js";
+import { setReviewData } from "../redux/reviewSlice";
 
 const CourseDetails = () => {
+  useGetAllReviews();
+  const dispatch = useDispatch();
+  
   const { courseId } = useParams();
   const navigate = useNavigate();
 
@@ -78,6 +83,12 @@ const CourseDetails = () => {
     return (total / reviews.length).toFixed(1);
   };
 
+  const courseReviews = (reviewData || []).filter((review) => {
+    const reviewCourse = review.course;
+    const reviewCourseId = typeof reviewCourse === "string" ? reviewCourse : reviewCourse?._id;
+    return reviewCourseId?.toString() === courseId?.toString();
+  });
+
   const avgRating = calculateAvgReview(courseReviews);
 
   const handleEnroll = async (userId, courseId) => {
@@ -131,6 +142,14 @@ const CourseDetails = () => {
       toast.success("Review Added");
       setComment("");
       setRating(0);
+      
+      // Refetch reviews to show the new review immediately
+      try {
+        const res = await axios.get(serverUrl + '/api/review/allreviews', { withCredentials: true });
+        dispatch(setReviewData(res.data.reviews));
+      } catch (error) {
+        console.log("Error refetching reviews:", error);
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add review");
     } finally {
@@ -158,6 +177,16 @@ const CourseDetails = () => {
     return (
       <div className="min-h-screen bg-black flex justify-center items-center">
         <ClipLoader color="#f97316" />
+      </div>
+    );
+
+  if (!course)
+    return (
+      <div className="min-h-screen bg-black text-gray-200 flex justify-center items-center px-6 md:px-20 py-10">
+        <div className="max-w-xl text-center">
+          <h1 className="text-2xl font-semibold mb-4">Course not found</h1>
+          <p className="text-gray-400">There was an issue loading this course. Please try again or return to the course list.</p>
+        </div>
       </div>
     );
 

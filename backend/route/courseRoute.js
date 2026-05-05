@@ -12,7 +12,7 @@ courseRouter.post('/create', isAuth, createCourse)
 courseRouter.post('/editcourse/:courseId', isAuth, upload.single("thumbnail"), editCourse)
 courseRouter.get('/getpublished', getPublishedCourses)
 courseRouter.get('/getcreator', isAuth, getCreatorCourses)
-courseRouter.get('/getcourse/:courseId', isAuth, getCourseById)
+courseRouter.get('/getcourse/:courseId', getCourseById)
 courseRouter.get('/remove/:courseId', isAuth, removeCourse)
 courseRouter.post('/free-enroll', isAuth, freeEnroll);
 
@@ -21,7 +21,7 @@ courseRouter.post('/createlecture/:courseId', isAuth, createLecture)
 courseRouter.get('/courselecture/:courseId', isAuth, getCourseLecture )
 courseRouter.post('/editlecture/:lectureId', isAuth,upload.single("videoUrl"), editLecture)
 courseRouter.delete('/removelecture/:lectureId', isAuth, removeLecture)
-courseRouter.post('/creator', isAuth, getCreatorById)
+courseRouter.post('/creator', getCreatorById)
 
 //For search
 courseRouter.post('/search', searchWithAi)
